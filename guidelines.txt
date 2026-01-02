@@ -1,0 +1,21 @@
+Goal: Build a robust, automated, and reproducible data science workflow for emission projection
+and transition risk analysis.
+Example Project: Develop and deploy a modeling pipeline to estimate and project company or
+sector emissions under different IEA scenarios.
+Tasks:
+• Design an end-to-end data pipeline: ingestion, cleaning, feature engineering, modeling,
+and output generation.
+• Implement version-controlled and modular code for traceability and reproducibility.
+• Automate data updates and scenario runs using notebooks, scripts, or workflow managers.
+• Deploy trained models or analytical scripts in a lightweight, production-ready format (e.g.,
+API endpoint, reproducible notebook, or Git repository).
+• Ensure consistent storage and documentation of input data, models, and results for future
+reuse.
+Deliverables:
+• Technical or methods section in Overleaf (architecture diagram, modeling workflow, data
+sources).
+• Reproducible pipeline or deployment demonstration (GitHub link, notebook, or mock API).
+• Contribution to the final presentation: value offered = automated, production-ready data
+pipeline enabling scalable climate analytics.
+Skills: Data engineering, ML/statistical modeling, version control, model deployment,
+reproducible research.
