@@ -1,0 +1,9 @@
+year,region,generation_twh,capacity_gw,unit_count,scenario,target_generation_twh,gap_twh,gap_percentage,alignment
+2050,Northern America,0.0,,,IEA_NZE_2050,1099.4,1099.4,100.0,Major shortfall
+2050,Asia,1548.0645719999998,201.647,217.0,IEA_NZE_2050,2473.65,925.5854280000003,37.41780073979747,Major shortfall
+2050,Europe,816.0632039999999,107.131,111.0,IEA_NZE_2050,1099.4,283.33679600000016,25.771947971620897,Shortfall
+2050,Latin America and the Caribbean,0.0,,,IEA_NZE_2050,274.85,274.85,100.0,Major shortfall
+2050,Africa,80.4168,10.8,10.0,IEA_NZE_2050,274.85,194.43320000000003,70.74156812806987,Major shortfall
+2050,Oceania,0.0,,,IEA_NZE_2050,164.91,164.91,100.0,Major shortfall
+2050,Western Asia,0.0,,,IEA_NZE_2050,109.94,109.94,100.0,Major shortfall
+2050,Americas,262.619982,34.263,107.0,,0.0,-262.619982,0.0,On track
