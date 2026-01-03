@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(python:*)",
+      "Bash(for file in *.py)",
+      "Bash(do sed -i 's/✅/OK -/g; s/❌/ERROR -/g; s/⚠️/WARNING -/g; s/📊/DATA -/g; s/📋/INFO -/g; s/📝/NOTE -/g; s/👀/VIEW -/g; s/🔍/SEARCH -/g; s/ℹ️/INFO -/g; s/🌍/GLOBAL -/g; s/🎯/TARGET -/g; s/🚀/RUN -/g; s/🔧/TOOL -/g; s/💡/TIP -/g; s/🎉/SUCCESS -/g' \"$file\")",
+      "Bash(done)"
+    ]
+  }
+}

@@ -42,10 +42,10 @@ class NuclearDataLoader:
                 print(f"  {i}. {sheet}")
             return self.sheet_names
         except FileNotFoundError:
-            print(f"❌ Error: File not found at {self.data_path}")
+            print(f"ERROR - Error: File not found at {self.data_path}")
             return None
         except Exception as e:
-            print(f"❌ Error loading Excel file: {e}")
+            print(f"ERROR - Error loading Excel file: {e}")
             return None
 
     def load_data(self, sheet_name: str = 0):
@@ -57,17 +57,17 @@ class NuclearDataLoader:
         """
         try:
             self.df = pd.read_excel(self.data_path, sheet_name=sheet_name)
-            print(f"✅ Loaded data from sheet: {sheet_name if isinstance(sheet_name, str) else self.sheet_names[sheet_name]}")
+            print(f"OK - Loaded data from sheet: {sheet_name if isinstance(sheet_name, str) else self.sheet_names[sheet_name]}")
             print(f"   Shape: {self.df.shape[0]} rows × {self.df.shape[1]} columns")
             return self.df
         except Exception as e:
-            print(f"❌ Error loading sheet: {e}")
+            print(f"ERROR - Error loading sheet: {e}")
             return None
 
     def explore_structure(self):
         """Explore the structure of the loaded data"""
         if self.df is None:
-            print("⚠️  No data loaded. Call load_data() first.")
+            print("WARNING -  No data loaded. Call load_data() first.")
             return
 
         print("\n" + "="*80)
@@ -95,7 +95,7 @@ class NuclearDataLoader:
     def identify_key_columns(self):
         """Identify key columns for nuclear projection analysis"""
         if self.df is None:
-            print("⚠️  No data loaded. Call load_data() first.")
+            print("WARNING -  No data loaded. Call load_data() first.")
             return
 
         print("\n" + "="*80)
@@ -124,7 +124,7 @@ class NuclearDataLoader:
                 for col in found:
                     print(f"  ✓ {col}")
             else:
-                print(f"  ⚠️  No columns found matching: {', '.join(patterns)}")
+                print(f"  WARNING -  No columns found matching: {', '.join(patterns)}")
 
     def analyze_status_distribution(self, status_col: str = None):
         """
@@ -134,7 +134,7 @@ class NuclearDataLoader:
             status_col: Name of the status column. If None, will try to auto-detect.
         """
         if self.df is None:
-            print("⚠️  No data loaded. Call load_data() first.")
+            print("WARNING -  No data loaded. Call load_data() first.")
             return
 
         # Auto-detect status column
@@ -146,7 +146,7 @@ class NuclearDataLoader:
                     break
 
         if status_col is None or status_col not in self.df.columns:
-            print(f"⚠️  Could not find status column. Available columns:")
+            print(f"WARNING -  Could not find status column. Available columns:")
             print(f"   {', '.join(self.df.columns[:10])}...")
             return
 
@@ -183,7 +183,7 @@ class NuclearDataLoader:
             capacity_col: Name of the capacity column. If None, will try to auto-detect.
         """
         if self.df is None:
-            print("⚠️  No data loaded. Call load_data() first.")
+            print("WARNING -  No data loaded. Call load_data() first.")
             return
 
         # Auto-detect capacity column
@@ -195,7 +195,7 @@ class NuclearDataLoader:
                     break
 
         if capacity_col is None or capacity_col not in self.df.columns:
-            print(f"⚠️  Could not find capacity column.")
+            print(f"WARNING -  Could not find capacity column.")
             return
 
         print(f"\n" + "="*80)
@@ -221,7 +221,7 @@ class NuclearDataLoader:
             country_col: Name of the country column. If None, will try to auto-detect.
         """
         if self.df is None:
-            print("⚠️  No data loaded. Call load_data() first.")
+            print("WARNING -  No data loaded. Call load_data() first.")
             return
 
         # Auto-detect country column
@@ -233,7 +233,7 @@ class NuclearDataLoader:
                     break
 
         if country_col is None or country_col not in self.df.columns:
-            print(f"⚠️  Could not find country/region column.")
+            print(f"WARNING -  Could not find country/region column.")
             return
 
         print(f"\n" + "="*80)
@@ -258,7 +258,7 @@ class NuclearDataLoader:
             output_path: Path to save the CSV. If None, uses default location.
         """
         if self.df is None:
-            print("⚠️  No data loaded. Call load_data() first.")
+            print("WARNING -  No data loaded. Call load_data() first.")
             return
 
         if output_path is None:
@@ -269,7 +269,7 @@ class NuclearDataLoader:
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         self.df.to_csv(output_path, index=False)
-        print(f"\n✅ Data saved to: {output_path}")
+        print(f"\nOK - Data saved to: {output_path}")
         print(f"   {len(self.df):,} rows × {len(self.df.columns)} columns")
 
 
@@ -318,7 +318,7 @@ def main():
     loader.save_processed_data()
 
     print("\n" + "="*80)
-    print("✅ DATA EXPLORATION COMPLETE!")
+    print("OK - DATA EXPLORATION COMPLETE!")
     print("="*80)
     print("\nNext steps:")
     print("  1. Review the output above to understand the data structure")
