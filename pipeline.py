@@ -236,7 +236,7 @@ class PipelineOrchestrator:
         if sheets is None:
             return False
 
-        loader.load_data(sheet_name=0)
+        loader.load_data(sheet_name="Data")
         loader.explore_structure()
         loader.identify_key_columns()
         loader.analyze_status_distribution()

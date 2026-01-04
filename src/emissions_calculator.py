@@ -188,7 +188,7 @@ class EmissionsCalculator:
             (global_emissions['year'] >= 2025) & (global_emissions['year'] <= 2050)
         ]['avoided_emissions_mtco2'].sum()
 
-        print(f"\n📊 Summary (2025-2050):")
+        print(f"\n[SUMMARY] Summary (2025-2050):")
         print(f"  * Annual avoided emissions (2050): {total_2050['avoided_emissions_mtco2']:,.1f} MtCO2")
         print(f"  * Cumulative avoided emissions: {cumulative_2025_2050/1000:,.2f} GtCO2")
         print(f"  * Equivalent to global CO2 emissions of ~{cumulative_2025_2050/36000:.1f} years (at 36 GtCO2/year)")
@@ -321,7 +321,7 @@ class EmissionsCalculator:
         for _, row in comparison_df.iterrows():
             print(f"{row['baseline_scenario']:<25s} {row['avoided_emissions_mtco2']:>28,.1f} {row['avoided_emissions_gtco2']:>18,.2f}")
 
-        print(f"\n📊 Interpretation:")
+        print(f"\n[INTERPRETATION] Interpretation:")
         print(f"  * Coal baseline: Maximum potential emissions reduction (replacing coal)")
         print(f"  * Gas baseline: Minimum potential emissions reduction (replacing gas)")
         print(f"  * Mixed/Regional: Realistic scenario (replacing typical fossil mix)")

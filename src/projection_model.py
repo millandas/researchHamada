@@ -72,7 +72,7 @@ class NuclearProjectionModel:
 
 
         # Clean capacity
-        self.df['capacity_numeric'] = pd.to_numeric(self.df['capacity_numeric'], errors='coerce')
+        self.df['capacity_numeric'] = pd.to_numeric(self.df['Capacity (MW)'], errors='coerce')
 
         # Extract start year (when plant becomes operational)
         # Priority: Start Year > Commercial Operation Date > First Grid Connection

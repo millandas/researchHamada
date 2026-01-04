@@ -107,7 +107,7 @@ class NuclearFeatureEngineer:
         print("="*80)
 
         # Handle missing capacity values
-        self.df['capacity_numeric'] = pd.to_numeric(self.df['capacity_numeric'], errors='coerce')
+        self.df['capacity_numeric'] = pd.to_numeric(self.df['Capacity (MW)'], errors='coerce')
 
         # Calculate annual generation in TWh
         # MW × 8760 hours × CF / 1,000,000 = TWh
@@ -119,7 +119,7 @@ class NuclearFeatureEngineer:
         total_capacity = self.df['capacity_numeric'].sum() / 1000  # GW
         total_generation = self.df['annual_generation_twh'].sum()
 
-        print(f"\n📊 Overall Statistics:")
+        print(f"\n[STATS] Overall Statistics:")
         print(f"  Total Capacity:    {total_capacity:,.1f} GW")
         print(f"  Total Generation:  {total_generation:,.1f} TWh/year")
         print(f"  Average CF:        {self.df['capacity_factor'].mean():.2%}")

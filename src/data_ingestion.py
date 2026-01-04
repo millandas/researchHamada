@@ -9,6 +9,12 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import warnings
+import sys
+
+# Configure stdout to handle Unicode characters on Windows
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 warnings.filterwarnings('ignore')
 
 
@@ -37,7 +43,7 @@ class NuclearDataLoader:
         try:
             excel_file = pd.ExcelFile(self.data_path)
             self.sheet_names = excel_file.sheet_names
-            print(f"📊 Found {len(self.sheet_names)} sheets in the Excel file:")
+            print(f"[INFO] Found {len(self.sheet_names)} sheets in the Excel file:")
             for i, sheet in enumerate(self.sheet_names, 1):
                 print(f"  {i}. {sheet}")
             return self.sheet_names
@@ -75,10 +81,10 @@ class NuclearDataLoader:
         print("="*80)
 
         # Basic info
-        print(f"\n📋 Dataset Shape: {self.df.shape[0]:,} rows × {self.df.shape[1]} columns")
+        print(f"\n[INFO] Dataset Shape: {self.df.shape[0]:,} rows x {self.df.shape[1]} columns")
 
         # Column names and types
-        print(f"\n📝 Column Names and Data Types:")
+        print(f"\n[INFO] Column Names and Data Types:")
         print("-" * 80)
         for i, (col, dtype) in enumerate(zip(self.df.columns, self.df.dtypes), 1):
             null_count = self.df[col].isna().sum()
@@ -86,7 +92,7 @@ class NuclearDataLoader:
             print(f"{i:3}. {col:50s} | {str(dtype):15s} | {null_pct:5.1f}% null")
 
         # Preview data
-        print(f"\n👀 First 3 rows:")
+        print(f"\n[PREVIEW] First 3 rows:")
         print("-" * 80)
         print(self.df.head(3).to_string())
 
@@ -122,7 +128,7 @@ class NuclearDataLoader:
                     found.append(col)
             if found:
                 for col in found:
-                    print(f"  ✓ {col}")
+                    print(f"  [x] {col}")
             else:
                 print(f"  WARNING -  No columns found matching: {', '.join(patterns)}")
 
@@ -165,13 +171,13 @@ class NuclearDataLoader:
         pipeline_keywords = ['announced', 'construction', 'planned', 'proposed', 'under construction']
         pipeline_count = 0
 
-        print(f"\n🔍 Pipeline Analysis (Future Projects):")
+        print(f"\n[ANALYSIS] Pipeline Analysis (Future Projects):")
         for status, count in status_counts.items():
             if any(keyword in str(status).lower() for keyword in pipeline_keywords):
                 pipeline_count += count
-                print(f"  → {status}: {count:,}")
+                print(f"  - {status}: {count:,}")
 
-        print(f"\n📊 Total Pipeline Projects: {pipeline_count:,} ({(pipeline_count/total)*100:.1f}%)")
+        print(f"\n[SUMMARY] Total Pipeline Projects: {pipeline_count:,} ({(pipeline_count/total)*100:.1f}%)")
 
         return status_counts
 

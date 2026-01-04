@@ -346,8 +346,8 @@ class ScenarioComparison:
         requirements = self.comparison[self.comparison['year'] == target_year].copy()
 
         # Calculate additional capacity needed (assuming 85% capacity factor)
-        # Gap (TWh) → Additional Capacity (GW)
-        # Capacity (GW) = Gap (TWh) / (8760 hours × CF / 1000)
+        # Gap (TWh) -> Additional Capacity (GW)
+        # Capacity (GW) = Gap (TWh) / (8760 hours * CF / 1000)
         requirements['additional_capacity_needed_gw'] = (
             requirements['gap_twh'] / (8760 * 0.85 / 1000)
         )

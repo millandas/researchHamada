@@ -142,14 +142,14 @@ with st.spinner("Loading data..."):
 # Sidebar - Navigation & Filters
 # ========================================
 
-st.sidebar.markdown("## ⚛️ Nuclear Energy Dashboard")
+st.sidebar.markdown("## Nuclear Energy Dashboard")
 st.sidebar.markdown("---")
 
 # Navigation
 analysis_type = st.sidebar.selectbox(
     "Select Analysis",
-    ["🏠 Global Overview",
-     "🌍 Regional Analysis",
+    ["🌍 Global Overview",
+     "🏠 Regional Analysis",
      "📊 Projections 2025-2050",
      "🎯 IEA Scenario Comparison",
      "🌱 Avoided Emissions",
@@ -187,6 +187,14 @@ selected_scenario = st.sidebar.selectbox(
     scenario_options
 )
 
+# Define scenario multipliers for projections
+SCENARIO_MULTIPLIERS = {
+    'Base': 1.0,
+    'Conservative': 0.85,
+    'Aggressive': 1.20
+}
+scenario_multiplier = SCENARIO_MULTIPLIERS[selected_scenario]
+
 st.sidebar.markdown("---")
 st.sidebar.markdown("### About")
 st.sidebar.info(
@@ -207,14 +215,14 @@ st.sidebar.info(
 # ========================================
 
 # Header
-st.markdown('<div class="main-header">⚛️ Nuclear Energy Projection Dashboard</div>',
+st.markdown('<div class="main-header"> Nuclear Energy Projection Dashboard</div>',
             unsafe_allow_html=True)
 
 # ========================================
 # Page 1: Global Overview
 # ========================================
 
-if analysis_type == "🏠 Global Overview":
+if analysis_type == "🌍 Global Overview":
     st.markdown("## Global Overview")
 
     # Key metrics row
@@ -225,15 +233,15 @@ if analysis_type == "🏠 Global Overview":
         st.metric("Total Plants", f"{total_plants:,}")
 
     with col2:
-        total_capacity = data['tracker']['capacity_numeric'].sum() / 1000
+        total_capacity = data['tracker']['Capacity (MW)'].sum() / 1000
         st.metric("Total Capacity", f"{total_capacity:,.0f} GW")
 
     with col3:
-        projection_2050 = data['global_projections'][data['global_projections']['year'] == 2050]['generation_twh'].values[0]
+        projection_2050 = data['global_projections'][data['global_projections']['year'] == 2050]['generation_twh'].values[0] * scenario_multiplier
         st.metric("2050 Projection", f"{projection_2050:,.0f} TWh")
 
     with col4:
-        total_avoided = data['global_emissions'][data['global_emissions']['year'] == 2050]['avoided_emissions_mtco2'].values[0]
+        total_avoided = data['global_emissions'][data['global_emissions']['year'] == 2050]['avoided_emissions_mtco2'].values[0] * scenario_multiplier
         st.metric("2050 Avoided Emissions", f"{total_avoided:,.0f} MtCO2")
 
     # Two column layout
@@ -310,14 +318,18 @@ if analysis_type == "🏠 Global Overview":
 # Page 2: Regional Analysis
 # ========================================
 
-elif analysis_type == "🌍 Regional Analysis":
+elif analysis_type == "🏠 Regional Analysis":
     st.markdown("## Regional Analysis")
 
     # Filter by selected regions
     if 'All' not in selected_regions and len(selected_regions) > 0:
-        regional_data = data['projections'][data['projections']['region'].isin(selected_regions)]
+        regional_data = data['projections'][data['projections']['region'].isin(selected_regions)].copy()
     else:
-        regional_data = data['projections']
+        regional_data = data['projections'].copy()
+
+    # Apply scenario multiplier
+    regional_data['generation_twh'] = regional_data['generation_twh'] * scenario_multiplier
+    regional_data['capacity_gw'] = regional_data['capacity_gw'] * scenario_multiplier
 
     # Regional projections by year
     st.markdown("### Regional Generation Projections")
@@ -406,11 +418,14 @@ elif analysis_type == "📊 Projections 2025-2050":
 
     # Filter data
     if 'All' not in selected_regions and len(selected_regions) > 0:
-        proj_data = data['projections'][data['projections']['region'].isin(selected_regions)]
+        proj_data = data['projections'][data['projections']['region'].isin(selected_regions)].copy()
     else:
-        proj_data = data['projections']
+        proj_data = data['projections'].copy()
 
     proj_data = proj_data[(proj_data['year'] >= year_range[0]) & (proj_data['year'] <= year_range[1])]
+
+    # Apply scenario multiplier
+    proj_data['generation_twh'] = proj_data['generation_twh'] * scenario_multiplier
 
     if viz_type == "Line Chart":
         fig = px.line(
@@ -507,30 +522,40 @@ elif analysis_type == "📊 Projections 2025-2050":
 elif analysis_type == "🎯 IEA Scenario Comparison":
     st.markdown("## IEA Net Zero Scenario Comparison")
 
+    # Apply scenario multiplier to gap data
+    global_gap_data = data['global_gap'].copy()
+    global_gap_data['generation_twh'] = global_gap_data['generation_twh'] * scenario_multiplier
+    global_gap_data['gap_twh'] = global_gap_data['target_generation_twh'] - global_gap_data['generation_twh']
+
+    regional_gaps_data = data['regional_gaps'].copy()
+    regional_gaps_data['generation_twh'] = regional_gaps_data['generation_twh'] * scenario_multiplier
+    regional_gaps_data['gap_twh'] = regional_gaps_data['target_generation_twh'] - regional_gaps_data['generation_twh']
+    regional_gaps_data['gap_percentage'] = (regional_gaps_data['gap_twh'] / regional_gaps_data['target_generation_twh'] * 100).fillna(0)
+
     # Global gap analysis
     st.markdown("### Global Generation Gap Analysis")
 
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=data['global_gap']['year'],
-        y=data['global_gap']['generation_twh'],
+        x=global_gap_data['year'],
+        y=global_gap_data['generation_twh'],
         mode='lines+markers',
         name='Projected Generation',
         line=dict(color='blue', width=2)
     ))
 
     fig.add_trace(go.Scatter(
-        x=data['global_gap']['year'],
-        y=data['global_gap']['target_generation_twh'],
+        x=global_gap_data['year'],
+        y=global_gap_data['target_generation_twh'],
         mode='lines+markers',
         name='IEA NZE Target',
         line=dict(color='green', width=2, dash='dash')
     ))
 
     fig.add_trace(go.Scatter(
-        x=data['global_gap']['year'],
-        y=data['global_gap']['gap_twh'],
+        x=global_gap_data['year'],
+        y=global_gap_data['gap_twh'],
         mode='lines',
         name='Gap',
         fill='tozeroy',
@@ -557,7 +582,7 @@ elif analysis_type == "🎯 IEA Scenario Comparison":
 
     with col1:
         # Gap bar chart
-        regional_gaps_sorted = data['regional_gaps'].sort_values('gap_twh')
+        regional_gaps_sorted = regional_gaps_data.sort_values('gap_twh')
 
         fig = go.Figure()
 
@@ -588,7 +613,7 @@ elif analysis_type == "🎯 IEA Scenario Comparison":
 
     with col2:
         # Alignment status
-        alignment_counts = data['regional_gaps']['alignment'].value_counts().reset_index()
+        alignment_counts = regional_gaps_data['alignment'].value_counts().reset_index()
         alignment_counts.columns = ['Alignment', 'Count']
 
         fig = px.pie(
@@ -615,7 +640,7 @@ elif analysis_type == "🎯 IEA Scenario Comparison":
     # Gap summary table
     st.markdown("### Gap Summary Table")
 
-    gap_table = data['regional_gaps'][['region', 'generation_twh', 'target_generation_twh',
+    gap_table = regional_gaps_data[['region', 'generation_twh', 'target_generation_twh',
                                         'gap_twh', 'gap_percentage', 'alignment']].copy()
     gap_table.columns = ['Region', 'Projected (TWh)', 'IEA Target (TWh)',
                          'Gap (TWh)', 'Gap (%)', 'Status']
@@ -635,15 +660,24 @@ elif analysis_type == "🎯 IEA Scenario Comparison":
 elif analysis_type == "🌱 Avoided Emissions":
     st.markdown("## Avoided CO2 Emissions Analysis")
 
+    # Apply scenario multiplier to emissions data
+    global_emissions_data = data['global_emissions'].copy()
+    global_emissions_data['avoided_emissions_mtco2'] = global_emissions_data['avoided_emissions_mtco2'] * scenario_multiplier
+    global_emissions_data['cumulative_avoided_mtco2'] = global_emissions_data['cumulative_avoided_mtco2'] * scenario_multiplier
+    global_emissions_data['cumulative_avoided_gtco2'] = global_emissions_data['cumulative_avoided_gtco2'] * scenario_multiplier
+
+    emissions_data = data['emissions'].copy()
+    emissions_data['avoided_emissions_mtco2'] = emissions_data['avoided_emissions_mtco2'] * scenario_multiplier
+
     # Key metrics
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        emissions_2050 = data['global_emissions'][data['global_emissions']['year'] == 2050]['avoided_emissions_mtco2'].values[0]
+        emissions_2050 = global_emissions_data[global_emissions_data['year'] == 2050]['avoided_emissions_mtco2'].values[0]
         st.metric("Annual Avoided (2050)", f"{emissions_2050:,.0f} MtCO2")
 
     with col2:
-        cumulative = data['global_emissions']['cumulative_avoided_mtco2'].iloc[-1] / 1000
+        cumulative = global_emissions_data['cumulative_avoided_mtco2'].iloc[-1] / 1000
         st.metric("Cumulative (2025-2050)", f"{cumulative:,.1f} GtCO2")
 
     with col3:
@@ -662,8 +696,8 @@ elif analysis_type == "🌱 Avoided Emissions":
     # Annual emissions
     fig.add_trace(
         go.Scatter(
-            x=data['global_emissions']['year'],
-            y=data['global_emissions']['avoided_emissions_mtco2'],
+            x=global_emissions_data['year'],
+            y=global_emissions_data['avoided_emissions_mtco2'],
             mode='lines+markers',
             name='Annual',
             line=dict(color='green', width=2),
@@ -676,8 +710,8 @@ elif analysis_type == "🌱 Avoided Emissions":
     # Cumulative emissions
     fig.add_trace(
         go.Scatter(
-            x=data['global_emissions']['year'],
-            y=data['global_emissions']['cumulative_avoided_gtco2'],
+            x=global_emissions_data['year'],
+            y=global_emissions_data['cumulative_avoided_gtco2'],
             mode='lines+markers',
             name='Cumulative',
             line=dict(color='darkgreen', width=2)
@@ -701,7 +735,7 @@ elif analysis_type == "🌱 Avoided Emissions":
     # Regional emissions (2050)
     st.markdown("### Regional Avoided Emissions (2050)")
 
-    regional_emissions = data['emissions'][data['emissions']['year'] == 2050].sort_values('avoided_emissions_mtco2', ascending=True)
+    regional_emissions = emissions_data[emissions_data['year'] == 2050].sort_values('avoided_emissions_mtco2', ascending=True)
 
     fig = px.bar(
         regional_emissions,
@@ -856,7 +890,7 @@ elif analysis_type == "📈 Statistical Analysis":
     fig = go.Figure()
 
     fig.add_trace(go.Histogram(
-        x=data['tracker']['capacity_numeric'].dropna(),
+        x=data['tracker']['Capacity (MW)'].dropna(),
         nbinsx=50,
         name='Capacity Distribution',
         marker_color='steelblue'
@@ -883,7 +917,7 @@ elif analysis_type == "📈 Statistical Analysis":
     fig = px.box(
         status_data,
         x='Status',
-        y='capacity_numeric',
+        y='Capacity (MW)',
         title="Capacity Distribution by Plant Status",
         color='Status'
     )
@@ -902,20 +936,20 @@ elif analysis_type == "📈 Statistical Analysis":
     st.markdown("### Capacity vs Generation Correlation")
 
     # Create scatter plot
-    features_data = data['tracker'][['capacity_numeric']].copy()
+    features_data = data['tracker'][['Capacity (MW)']].copy()
     features_data['annual_generation_twh'] = (
-        features_data['capacity_numeric'] * 8760 * 0.9 / 1_000_000
+        features_data['Capacity (MW)'] * 8760 * 0.9 / 1_000_000
     )
     features_data = features_data.dropna()
 
     fig = px.scatter(
         features_data,
-        x='capacity_numeric',
+        x='Capacity (MW)',
         y='annual_generation_twh',
         title="Capacity vs Annual Generation",
         trendline="ols",
         labels={
-            'capacity_numeric': 'Capacity (MW)',
+            'Capacity (MW)': 'Capacity (MW)',
             'annual_generation_twh': 'Annual Generation (TWh)'
         }
     )
@@ -928,13 +962,13 @@ elif analysis_type == "📈 Statistical Analysis":
 
     st.plotly_chart(fig, use_container_width=True)
 
-    correlation = features_data['capacity_numeric'].corr(features_data['annual_generation_twh'])
+    correlation = features_data['Capacity (MW)'].corr(features_data['annual_generation_twh'])
     st.metric("Pearson Correlation", f"{correlation:.4f}")
 
     # Summary statistics
     st.markdown("### Summary Statistics")
 
-    summary_stats = data['tracker']['capacity_numeric'].describe().to_frame()
+    summary_stats = data['tracker']['Capacity (MW)'].describe().to_frame()
     summary_stats.columns = ['Value']
     summary_stats['Value'] = summary_stats['Value'].round(2)
 
