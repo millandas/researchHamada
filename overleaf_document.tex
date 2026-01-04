@@ -75,17 +75,10 @@ This technical report presents the development and deployment of an automated, r
 \section{Introduction}
 %==============================================================================
 
-Climate transition risk analysis requires robust, automated systems capable of projecting energy generation under multiple scenarios while quantifying uncertainty. Nuclear energy, as a low-carbon electricity source, plays a critical role in decarbonization pathways outlined by the International Energy Agency (IEA) Net Zero 2050 scenario.
+Analysing risks of climate transition requires quality automated systems that are capable of projecting energy generation predictions under various scenarios whilst also quantifying uncertainty factors. Nuclear energy is a low-carbon electricity source alternative to the status quo systems that plays a critical role in the decarbonisation outline constructed by the International Energy Agency (IEA) Net Zero 2050 scenario. 
 
-This project develops an end-to-end data science pipeline that:
-\begin{itemize}[noitemsep]
-    \item Ingests and processes global nuclear plant data from authoritative sources
-    \item Engineers features for capacity factor estimation and generation calculation
-    \item Projects regional and global nuclear generation to 2050 under multiple scenarios
-    \item Compares projections against IEA Net Zero targets to identify gaps
-    \item Calculates avoided CO$_2$ emissions from nuclear replacing fossil fuel generation
-    \item Deploys results via an interactive dashboard for stakeholder communication
-\end{itemize}
+This research project develops an end-to-end pipeline that covers multiple data science tasks. The pipeline was developed to engineer features for capacity factor estimation and generation calculation, as well as projecting region and/or global nuclear generation to the year 2050 under multiple scenarios. Moreover, it can compare these projections against the IEA Net Zero targets to identify gaps and calculate the avoided CO$_2$ emissions from the replacement of fossil fuel energy generation with nuclear.
+This deploys via an interactive streamlit dashboard.
 
 The pipeline is designed with reproducibility, modularity, and automation as core principles, enabling scalable climate analytics for research and policy applications.
 
@@ -95,7 +88,8 @@ The pipeline is designed with reproducibility, modularity, and automation as cor
 
 \subsection{System Overview}
 
-The pipeline follows a modular architecture with five sequential processing stages, each implemented as an independent Python class. Figure~\ref{fig:architecture} illustrates the complete system architecture.
+The pipeline is made up of a modular architecture comprised of 5 processing stages, each of which is implemented independently as a Python class.
+Figure 1: Complete system architecture
 
 \begin{figure}[H]
 \centering
@@ -154,13 +148,13 @@ The pipeline follows a modular architecture with five sequential processing stag
 \end{scope}
 
 \end{tikzpicture}
-\caption{System Architecture: End-to-end data pipeline from ingestion to deployment}
+\caption{System Architecture: End-to-end pipeline from data ingestion to deployment}
 \label{fig:architecture}
 \end{figure}
 
 \subsection{Directory Structure}
 
-The project follows a standardized data science project structure:
+The project follows the following directory structure:
 
 \begin{lstlisting}[language=bash, caption={Project Directory Structure}]
 researchhamada/
@@ -179,7 +173,7 @@ researchhamada/
 |   |-- 01_exploratory_analysis_executed.ipynb
 |   +-- 02_statistical_analysis.ipynb
 |-- outputs/
-|   |-- figures/                # Generated visualizations
+|   |-- figures/                # Generated visualisations
 |   +-- results/                # Statistical summaries
 |-- logs/                       # Pipeline execution logs
 |-- pipeline.py                 # Main orchestrator
@@ -190,7 +184,7 @@ researchhamada/
 
 \subsection{Technology Stack}
 
-Table~\ref{tab:tech-stack} summarizes the technologies and frameworks used in the pipeline.
+Table~\ref{tab:tech-stack} summarises the technologies and frameworks used in the pipeline.
 
 \begin{table}[H]
 \centering
@@ -204,7 +198,7 @@ Programming Language & Python 3.11+ & Core development \\
 Data Processing & pandas, numpy, openpyxl & Data manipulation, Excel I/O \\
 Statistical Analysis & scipy, statsmodels & Hypothesis testing, regression \\
 Machine Learning & scikit-learn & PCA, preprocessing \\
-Visualization & matplotlib, seaborn, plotly & Static and interactive charts \\
+Visualisation & matplotlib, seaborn, plotly & Static and interactive charts \\
 Dashboard & Streamlit & Web-based deployment \\
 Notebook Automation & Jupyter, papermill & Reproducible analysis \\
 Version Control & Git, GitHub & Code management \\
@@ -218,7 +212,7 @@ Version Control & Git, GitHub & Code management \\
 
 \subsection{Primary Data: Global Nuclear Power Tracker}
 
-The primary data source is the \textbf{Global Nuclear Power Tracker} (September 2025 release), maintained by Global Energy Monitor. This dataset provides comprehensive information on nuclear power plants worldwide.
+The primary data source is the \textbf{Global Nuclear Power Tracker} (September 2025 release), maintained by Global Energy Monitor. This dataset provides comprehensive information on nuclear power plants around the world (see table below).
 
 \begin{table}[H]
 \centering
@@ -242,18 +236,27 @@ Temporal Range & Historical to planned (2050+) \\
 
 The dataset includes the following categories of information:
 
-\begin{itemize}[noitemsep]
-    \item \textbf{Identification}: Project Name, Unit Name, Country/Area, Region, Subregion
-    \item \textbf{Technical Specifications}: Reactor Type, Model, Capacity (MW)
-    \item \textbf{Timeline}: Start Year, Commercial Operation Date, Retirement Year
-    \item \textbf{Operational Status}: Operating, Announced, Construction, Cancelled, Shelved, Retired
-    \item \textbf{Geospatial}: Latitude, Longitude, State/Province
-    \item \textbf{Ownership}: Owner, Operator
-\end{itemize}
+\begin{table}[H]
+\centering
+\caption{Key Data Fields in Global Nuclear Power Tracker}
+\label{tab:data-fields}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Category} & \textbf{Attributes} \\
+\midrule
+Identification & Project Name, Unit Name, Country/Area, Region, Subregion \\
+Technical Specifications & Reactor Type, Model, Capacity (MW) \\
+Timeline & Start Year, Commercial Operation Date, Retirement Year \\
+Operational Status & Operating, Announced, Construction, Cancelled, Shelved, Retired \\
+Geospatial & Latitude, Longitude, State/Province \\
+Ownership & Owner, Operator \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsubsection{Status Distribution}
 
-Figure~\ref{fig:status-dist} shows the distribution of plants by operational status:
+Table~\ref{tab:status-dist} shows the distribution of plants by operational status:
 
 \begin{table}[H]
 \centering
@@ -276,7 +279,7 @@ Retired & 383 & 21.9\% \\
 
 \subsection{Secondary Data: IEA Net Zero 2050 Scenario}
 
-The IEA Net Zero by 2050 scenario (NZE2021\_AnnexA.csv) provides nuclear generation targets required to achieve global net-zero emissions by 2050.
+The IEA Net Zero by 2050 scenario (NZE2021\_AnnexA.csv) provides a proposed set of nuclear generation targets that would be required in order to achieve net-zero emissions on a global scale by 2050. 
 
 \begin{table}[H]
 \centering
@@ -356,10 +359,10 @@ where:
 
 The feature engineering stage produces multiple aggregation levels:
 \begin{itemize}[noitemsep]
-    \item Regional aggregations (4 global regions)
-    \item Subregional aggregations
-    \item Country-level aggregations (61 countries)
-    \item Status-based aggregations
+    \item Regional  (4 global regions)
+    \item Subregional 
+    \item Country-level  (61 countries)
+    \item Status-based
 \end{itemize}
 
 \subsection{Stage 3: Projection Modeling}
@@ -391,7 +394,7 @@ The \texttt{EnhancedNuclearProjectionModel} class implements uncertainty quantif
 \textbf{Stochastic Parameters}:
 
 \begin{enumerate}
-    \item \textbf{Capacity Factors} -- Normal distribution:
+    \item \textbf{Capacity Factors} follow a Normal distribution:
     \begin{equation}
         CF_{status} \sim \mathcal{N}(\mu_{status}, \sigma_{status})
     \end{equation}
@@ -410,7 +413,7 @@ The \texttt{EnhancedNuclearProjectionModel} class implements uncertainty quantif
     \end{tabular}
     \end{table}
 
-    \item \textbf{Construction Delays} -- Scenario-dependent:
+    \item \textbf{Construction Delays} are Scenario-dependent:
     \begin{equation}
         \Delta t_{delay} \sim \mathcal{N}(\mu_{scenario}, \sigma_{scenario})
     \end{equation}
@@ -462,9 +465,9 @@ The \texttt{EnhancedNuclearProjectionModel} class implements uncertainty quantif
 
 \textbf{Uncertainty Bounds}:
 \begin{itemize}[noitemsep]
-    \item P10 (10th percentile): Lower bound / pessimistic
-    \item P50 (50th percentile): Central estimate / median
-    \item P90 (90th percentile): Upper bound / optimistic
+    \item P10: Lower bound / pessimistic
+    \item P50: Central estimate / median
+    \item P90: Upper bound / optimistic
 \end{itemize}
 
 \subsection{Stage 4: Scenario Comparison}
@@ -569,14 +572,7 @@ The \texttt{PipelineOrchestrator} class in \texttt{pipeline.py} manages end-to-e
 
 \subsubsection{Features}
 
-\begin{itemize}[noitemsep]
-    \item Sequential dependency management
-    \item Skip-if-exists capability for incremental runs
-    \item Comprehensive logging (file + console)
-    \item Execution time tracking per stage
-    \item Error handling with detailed tracebacks
-    \item Output cleaning for fresh runs
-\end{itemize}
+Features include sequential dependency management, skip-if-exists capability for incremental runs, comprehensive logging (file + console), execution time tracking per stage, error handling with detailed tracebacks, output cleaning for fresh runs.
 
 \subsubsection{Command-Line Interface}
 
@@ -600,6 +596,7 @@ python pipeline.py --all --verbose
 \subsection{Execution Flow}
 
 \begin{figure}[H]
+\label{fig:execution-flow}
 \centering
 \begin{tikzpicture}[
     node distance=0.8cm,
@@ -622,19 +619,11 @@ python pipeline.py --all --verbose
 \draw[arrow] (s6) -- (s7);
 \end{tikzpicture}
 \caption{Pipeline Execution Flow}
-\label{fig:execution-flow}
 \end{figure}
 
 \subsection{Logging System}
 
-Logs are written to \texttt{logs/pipeline\_YYYYMMDD\_HHMMSS.log} with:
-\begin{itemize}[noitemsep]
-    \item Timestamp for each operation
-    \item Stage start/completion status
-    \item Execution duration per stage
-    \item Error messages with full tracebacks
-    \item Output file sizes
-\end{itemize}
+Logs are written to \texttt{logs/pipeline\_YYYYMMDD\_HHMMSS.log} with timestamps for each operation, stage start/completion status, execution duration per stage, error messages with tracebacks, and output file sizes
 
 %==============================================================================
 \section{Deployment: Interactive Dashboard}
@@ -653,32 +642,54 @@ streamlit run app.py
 
 \subsection{Dashboard Pages}
 
-The dashboard contains 7 interactive pages:
+The dashboard contains 7 interactive pages, summarised in Table~\ref{tab:dashboard-pages}.
 
-\begin{enumerate}
-    \item \textbf{Global Overview}: Key metrics, status distribution, regional distribution, global timeline
-    \item \textbf{Regional Analysis}: Regional projections, capacity distribution, generation share
-    \item \textbf{Projections 2025--2050}: Multiple visualization types, growth rate analysis, milestone years
-    \item \textbf{IEA Scenario Comparison}: Gap analysis, regional gaps, alignment status
-    \item \textbf{Avoided Emissions}: Annual and cumulative emissions, car equivalent metrics
-    \item \textbf{Pipeline Analysis}: Operating vs pipeline capacity, contribution breakdown
-    \item \textbf{Statistical Analysis}: Distribution plots, correlations, regression visualization
-\end{enumerate}
+\begin{table}[H]
+\centering
+\caption{Dashboard Pages and Features}
+\label{tab:dashboard-pages}
+\begin{tabular}{@{}lp{9cm}@{}}
+\toprule
+\textbf{Page} & \textbf{Features} \\
+\midrule
+Global Overview & Key metrics, status distribution, regional distribution, global timeline \\
+Regional Analysis & Regional projections, capacity distribution, generation share \\
+Projections 2025--2050 & Multiple visualisation types, growth rate analysis, milestone years \\
+IEA Scenario Comparison & Gap analysis, regional gaps, alignment status \\
+Avoided Emissions & Annual and cumulative emissions, car equivalent metrics \\
+Pipeline Analysis & Operating vs pipeline capacity, contribution breakdown \\
+Statistical Analysis & Distribution plots, correlations, regression visualisation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 
 \subsection{Interactive Features}
 
-\begin{itemize}[noitemsep]
-    \item \textbf{Sidebar Filters}: Year range slider, region multiselect, scenario dropdown
-    \item \textbf{Plotly Charts}: Interactive hover tooltips, zoom, pan
-    \item \textbf{Responsive Design}: Desktop, tablet, and mobile support
-    \item \textbf{Data Caching}: Optimized performance with \texttt{@st.cache\_data}
-\end{itemize}
+The interactive dashboard includes the features summarised in Table~\ref{tab:interactive-features}.
+
+\begin{table}[H]
+\centering
+\caption{Interactive Dashboard Features}
+\label{tab:interactive-features}
+\begin{tabular}{@{}p{3.5cm}p{9cm}@{}}
+\toprule
+\textbf{Feature} & \textbf{Description} \\
+\midrule
+Sidebar Filters & Year range slider, region multiselect, scenario dropdown for dynamic data filtering \\
+Plotly Charts & Interactive hover tooltips, zoom, and pan capabilities for detailed exploration \\
+Responsive Design & Optimised layouts for desktop, tablet, and mobile viewing \\
+Data Caching & Performance optimisation using \texttt{@st.cache\_data} decorators \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 %==============================================================================
 \section{Results Summary}
 %==============================================================================
 
 \subsection{Key Projections}
+The projections show nuclear generation to grow up to between 5000 to 7000 TWh by 2050, depending on the scenario.
 
 \begin{table}[H]
 \centering
@@ -695,6 +706,7 @@ Global Generation (TWh) - Aggressive & 3,600 & 5,200 & 6,800 \\
 \end{table}
 
 \subsection{IEA Gap Analysis}
+The gap analysis suggests that nuclear generation will not reach IEA targets by 2030 outside of the aggressive scenario.
 
 \begin{table}[H]
 \centering
@@ -711,6 +723,7 @@ Global Generation (TWh) - Aggressive & 3,600 & 5,200 & 6,800 \\
 \end{table}
 
 \subsection{Avoided Emissions}
+The predicted avoided cumulative CO$_2$ emissions over the next 25 years from nuclear generation replacing fossil fuels reach up to 50 GtCO$_2$.
 
 \begin{table}[H]
 \centering
@@ -732,13 +745,7 @@ Car Equivalent & 400--600 million cars (25 years) \\
 
 \subsection{Repository Structure}
 
-The complete codebase is version-controlled on GitHub, ensuring:
-\begin{itemize}[noitemsep]
-    \item Full commit history and traceability
-    \item Branch management for feature development
-    \item Issue tracking for bug reports and enhancements
-    \item Documentation via README and inline comments
-\end{itemize}
+The complete codebase is version-controlled on GitHub. Features are traceable via commit history, and branches are used for feature development and branch isolation. Documentation for the codebase exists inside the README as well as in inline comments.
 
 \subsection{Environment Reproducibility}
 
@@ -765,13 +772,9 @@ streamlit run app.py
 \subsection{Dependencies}
 
 Key dependencies specified in \texttt{requirements.txt}:
-\begin{itemize}[noitemsep]
-    \item pandas, numpy, openpyxl
-    \item matplotlib, seaborn, plotly
-    \item scipy, statsmodels, scikit-learn
-    \item streamlit
-    \item jupyter, papermill
-\end{itemize}
+\begin{lstlisting}[frame=single, basicstyle=\ttfamily\small]
+pandas, numpy, openpyxl, matplotlib, seaborn, plotly, scipy, statsmodels, scikit-learn, streamlit, jupyter, papermill
+\end{lstlisting}
 
 %==============================================================================
 \section{Conclusion and Value Proposition}
@@ -781,26 +784,17 @@ This project delivers an \textbf{automated, production-ready data pipeline} for 
 
 \subsection{Key Contributions}
 
-\begin{enumerate}
-    \item \textbf{End-to-End Automation}: Complete workflow from raw data to interactive dashboard
-    \item \textbf{Uncertainty Quantification}: Monte Carlo simulation with P10/P50/P90 bounds
-    \item \textbf{Scenario Analysis}: Three scenarios (Base, Conservative, Aggressive) for decision support
-    \item \textbf{IEA Alignment Assessment}: Gap analysis against Net Zero 2050 targets
-    \item \textbf{Emissions Impact}: Quantified avoided CO$_2$ emissions with regional detail
-    \item \textbf{Interactive Deployment}: Stakeholder-ready Streamlit dashboard
-    \item \textbf{Reproducibility}: Version-controlled, documented, modular codebase
-\end{enumerate}
+A complete data pipeline with an end-to-end automation workflow that outputs to an interactive dashboard. 
+A Monte Carlo simulation to quantify uncertainties.
+Trivariate scenario analyses (base, conservative, aggressive) to support decisions.
+Gap analysis against NetZero 2050 to assess alignment with IEA targets.
+Quantified avoided CO_2 emissions with added per-region support.
+Modular codebase enables reproducible and scalable results.
+
 
 \subsection{Value for Climate Analytics}
 
-The pipeline enables \textbf{scalable climate analytics} by:
-\begin{itemize}[noitemsep]
-    \item Processing authoritative global nuclear plant data
-    \item Projecting generation under multiple plausible scenarios
-    \item Identifying gaps against international climate targets
-    \item Quantifying climate mitigation benefits
-    \item Providing interactive tools for stakeholder engagement
-\end{itemize}
+The structure of the pipeline enables reproducibility through the processing of the data. New data can be used to produce updated predictions and larger datasets or larger-scale datasets can be used to scale the analytics.
 
 %==============================================================================
 \section*{Acknowledgments}
