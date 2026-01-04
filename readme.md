@@ -41,18 +41,29 @@ The dashboard will open at `http://localhost:8501`
 ## Project Structure
 
 ```
-research-final-proj/
+researchHamada/
 ├── data/
 │   ├── raw/                              # Original data sources
 │   │   ├── Global-Nuclear-Power-Tracker-September-2025.xlsx
 │   │   └── NZE2021_AnnexA.csv
 │   ├── processed/                        # Pipeline outputs
-│   │   ├── nuclear_tracker_cleaned.csv
-│   │   ├── nuclear_features.csv
-│   │   ├── nuclear_projections_2050.csv
-│   │   ├── scenario_comparison.csv
 │   │   ├── avoided_emissions.csv
-│   │   └── [17 other CSV files...]
+│   │   ├── baseline_scenario_comparison.csv
+│   │   ├── country_aggregations.csv
+│   │   ├── cumulative_regional_emissions.csv
+│   │   ├── global_avoided_emissions.csv
+│   │   ├── global_gap_analysis.csv
+│   │   ├── global_projections_2050.csv
+│   │   ├── nuclear_features.csv
+│   │   ├── nuclear_pipeline_projects.csv
+│   │   ├── nuclear_projections_2050.csv
+│   │   ├── nuclear_tracker_cleaned.csv
+│   │   ├── pipeline_contribution_2050.csv
+│   │   ├── regional_aggregations.csv
+│   │   ├── regional_gaps_2050.csv
+│   │   ├── scenario_comparison.csv
+│   │   ├── status_aggregations.csv
+│   │   └── subregional_aggregations.csv
 │   └── external/
 │       └── IEA_DATA_REQUIREMENTS.md
 ├── src/
@@ -66,8 +77,9 @@ research-final-proj/
 │   ├── 01_exploratory_analysis_executed.ipynb
 │   └── 02_statistical_analysis.ipynb     # Statistical tests & analysis
 ├── outputs/
-│   ├── figures/                          # Generated visualizations
+│   ├── figures/                          # Generated visualisations
 │   └── results/                          # Statistical summaries
+│       └── statistical_summary.csv
 ├── logs/                                 # Pipeline execution logs
 ├── pipeline.py                           # Main pipeline orchestrator
 ├── app.py                                # Streamlit interactive dashboard
@@ -75,6 +87,7 @@ research-final-proj/
 ├── requirements.txt                      # Python dependencies
 ├── pyproject.toml                        # Project configuration
 ├── guidelines.txt                        # Assignment guidelines
+├── overleaf_document.tex                 # LaTeX document for paper
 └── readme.md                             # This file
 ```
 

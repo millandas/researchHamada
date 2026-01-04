@@ -157,11 +157,31 @@ Figure 1: Complete system architecture
 The project follows the following directory structure:
 
 \begin{lstlisting}[language=bash, caption={Project Directory Structure}]
-researchhamada/
+researchHamada/
 |-- data/
 |   |-- raw/                    # Original source data (immutable)
+|   |   |-- Global-Nuclear-Power-Tracker-September-2025.xlsx
+|   |   +-- NZE2021_AnnexA.csv
 |   |-- processed/              # Pipeline outputs (17 CSV files)
+|   |   |-- avoided_emissions.csv
+|   |   |-- baseline_scenario_comparison.csv
+|   |   |-- country_aggregations.csv
+|   |   |-- cumulative_regional_emissions.csv
+|   |   |-- global_avoided_emissions.csv
+|   |   |-- global_gap_analysis.csv
+|   |   |-- global_projections_2050.csv
+|   |   |-- nuclear_features.csv
+|   |   |-- nuclear_pipeline_projects.csv
+|   |   |-- nuclear_projections_2050.csv
+|   |   |-- nuclear_tracker_cleaned.csv
+|   |   |-- pipeline_contribution_2050.csv
+|   |   |-- regional_aggregations.csv
+|   |   |-- regional_gaps_2050.csv
+|   |   |-- scenario_comparison.csv
+|   |   |-- status_aggregations.csv
+|   |   +-- subregional_aggregations.csv
 |   +-- external/               # External documentation
+|       +-- IEA_DATA_REQUIREMENTS.md
 |-- src/                        # Core pipeline modules
 |   |-- data_ingestion.py       # NuclearDataLoader class
 |   |-- feature_engineering.py  # NuclearFeatureEngineer class
@@ -175,11 +195,16 @@ researchhamada/
 |-- outputs/
 |   |-- figures/                # Generated visualisations
 |   +-- results/                # Statistical summaries
+|       +-- statistical_summary.csv
 |-- logs/                       # Pipeline execution logs
 |-- pipeline.py                 # Main orchestrator
 |-- app.py                      # Streamlit dashboard
+|-- main.py                     # Legacy runner
 |-- requirements.txt            # Python dependencies
-+-- pyproject.toml              # Project configuration
+|-- pyproject.toml              # Project configuration
+|-- guidelines.txt              # Assignment guidelines
+|-- overleaf_document.tex       # LaTeX document for paper
++-- readme.md                   # Project documentation
 \end{lstlisting}
 
 \subsection{Technology Stack}
