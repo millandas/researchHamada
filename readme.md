@@ -197,13 +197,13 @@ The Streamlit dashboard (`app.py`) provides 7 interactive analysis pages:
 
 ### Pages
 
-1. **🏠 Global Overview**: High-level metrics, plant status distribution, global timeline
-2. **🌍 Regional Analysis**: Regional projections, capacity distribution, generation share
-3. **📊 Projections 2025-2050**: Multiple visualization types (line, area, bar, heatmap)
-4. **🎯 IEA Scenario Comparison**: Gap analysis, regional alignment status
-5. **🌱 Avoided Emissions**: Annual and cumulative CO2 reductions by region
-6. **🔧 Pipeline Analysis**: Operating vs pipeline contribution breakdown
-7. **📈 Statistical Analysis**: Capacity distributions, correlations, summary stats
+1. ** Global Overview**: High-level metrics, plant status distribution, global timeline
+2. ** Regional Analysis**: Regional projections, capacity distribution, generation share
+3. ** Projections 2025-2050**: Multiple visualization types (line, area, bar, heatmap)
+4. ** IEA Scenario Comparison**: Gap analysis, regional alignment status
+5. ** Avoided Emissions**: Annual and cumulative CO2 reductions by region
+6. ** Pipeline Analysis**: Operating vs pipeline contribution breakdown
+7. ** Statistical Analysis**: Capacity distributions, correlations, summary stats
 
 ### Features
 
